@@ -1,0 +1,11 @@
+{
+  "name": "Edible Flowers",
+  "author": "El_Neuman",
+  "description": "Makes all five vanilla flowers edible, restoring hunger and thirst",
+  "version": "0.1.0",
+  "requiredByAllPlayers": false,
+  "icon": "icon.png",
+  "updateUrl": "https://raftmodding.com/api/v1/mods/edible-flowers/version.txt",
+  "banner": "banner.png",
+  "isModPermanent": false
+}

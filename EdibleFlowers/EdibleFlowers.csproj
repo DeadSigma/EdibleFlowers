@@ -1,0 +1,266 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net48</TargetFramework>
+		<LangVersion>7.3</LangVersion>
+		<PlatformTarget>x64</PlatformTarget>
+
+		<AssemblyName>EdibleFlowers</AssemblyName>
+		<RootNamespace>EdibleFlowers</RootNamespace>
+
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<OutputPath>bin\$(Configuration)\</OutputPath>
+
+		<ImplicitUsings>disable</ImplicitUsings>
+		<Nullable>disable</Nullable>
+
+		<BeforePack>SetReleaseRmodMode;$(BeforePack)</BeforePack>
+
+
+		<RaftDir Condition="'$(RaftDir)' == ''">C:\Program Files (x86)\Steam\steamapps\common\Raft</RaftDir>
+		<RmlDir Condition="'$(RmlDir)' == ''">$(APPDATA)\RaftModLoader</RmlDir>
+		<RmlBinariesDir>$(RmlDir)\binaries</RmlBinariesDir>
+		<RmlPublicizedDir>$(RmlDir)\cache\publicizedAssemblies</RmlPublicizedDir>
+
+		<RaftExePath>$(RaftDir)\Raft.exe</RaftExePath>
+		<RaftModsDir>$(RaftDir)\mods</RaftModsDir>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Reference Include="Assembly-CSharp">
+			<HintPath>$(RmlPublicizedDir)\Assembly-CSharp.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+
+		<Reference Include="HMLCoreLibrary">
+			<HintPath>$(RmlBinariesDir)\HMLCoreLibrary.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+
+		<Reference Include="coremod">
+			<HintPath>$(RmlBinariesDir)\coremod.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+
+		<Reference Include="0Harmony">
+			<HintPath>$(RmlBinariesDir)\0Harmony.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+
+		<Reference Include="SemanticVersion">
+			<HintPath>$(RmlBinariesDir)\SemanticVersion.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+
+		<Reference Include="SharpZipLib">
+			<HintPath>$(RmlBinariesDir)\SharpZipLib.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+
+		<Reference Include="UnityEngine.JSONSerializeModule">
+    <HintPath>$(RaftDir)\Raft_Data\Managed\UnityEngine.JSONSerializeModule.dll</HintPath>
+    <Private>false</Private>
+</Reference>
+		
+		<Reference Include="FMODUnity">
+			<HintPath>$(RmlPublicizedDir)\FMODUnity.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+
+		<Reference Include="UnityEngine">
+			<HintPath>$(RaftDir)\Raft_Data\Managed\UnityEngine.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+
+		<Reference Include="UnityEngine.ImageConversionModule">
+            <HintPath>$(RaftDir)\Raft_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+
+        <Reference Include="UnityEngine.CoreModule">
+			<HintPath>$(RaftDir)\Raft_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+
+		<Reference Include="UnityEngine.TerrainModule">
+			<HintPath>$(RaftDir)\Raft_Data\Managed\UnityEngine.TerrainModule.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+
+		<Reference Include="UnityEngine.TerrainPhysicsModule">
+			<HintPath>$(RaftDir)\Raft_Data\Managed\UnityEngine.TerrainPhysicsModule.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+
+		<Reference Include="UnityEngine.PhysicsModule">
+			<HintPath>$(RaftDir)\Raft_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+
+		<Reference Include="UnityEngine.InputLegacyModule">
+			<HintPath>$(RaftDir)\Raft_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+
+		<Reference Include="UnityEngine.AssetBundleModule">
+			<HintPath>$(RaftDir)\Raft_Data\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+
+		<Reference Include="UnityEngine.IMGUIModule">
+			<HintPath>$(RaftDir)\Raft_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+
+		<Reference Include="UnityEngine.UIModule">
+			<HintPath>$(RaftDir)\Raft_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+
+		<Reference Include="UnityEngine.UI">
+			<HintPath>$(RaftDir)\Raft_Data\Managed\UnityEngine.UI.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+
+		<Reference Include="UnityEngine.TextRenderingModule">
+			<HintPath>$(RaftDir)\Raft_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+
+		<Reference Include="Unity.TextMeshPro">
+			<HintPath>$(RaftDir)\Raft_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+	</ItemGroup>
+
+	<Target Name="ValidateRaftEnvironment" BeforeTargets="ResolveReferences">
+		<Error Condition="!Exists('$(RaftExePath)')" Text="Raft.exe не найден: $(RaftExePath)" />
+
+		<Error Condition="!Exists('$(RmlBinariesDir)\HMLCoreLibrary.dll')" Text="HMLCoreLibrary.dll не найден: $(RmlBinariesDir)\HMLCoreLibrary.dll" />
+
+		<Error Condition="!Exists('$(RmlBinariesDir)\coremod.dll')" Text="coremod.dll не найден: $(RmlBinariesDir)\coremod.dll" />
+
+		<Error Condition="!Exists('$(RmlBinariesDir)\0Harmony.dll')" Text="0Harmony.dll не найден: $(RmlBinariesDir)\0Harmony.dll" />
+
+		<Error Condition="!Exists('$(RmlPublicizedDir)\Assembly-CSharp.dll')" Text="Publicized Assembly-CSharp.dll не найден: $(RmlPublicizedDir)\Assembly-CSharp.dll. Запусти Raft через RML хотя бы один раз" />
+
+		<Error Condition="!Exists('$(RmlPublicizedDir)\FMODUnity.dll')" Text="Publicized FMODUnity.dll не найден: $(RmlPublicizedDir)\FMODUnity.dll. Запусти Raft через RML хотя бы один раз" />
+
+
+		<Error Condition="!Exists('$(RaftDir)\Raft_Data\Managed\UnityEngine.ImageConversionModule.dll')" Text="UnityEngine.ImageConversionModule.dll не найден: $(RaftDir)\Raft_Data\Managed" />
+
+        <Error Condition="!Exists('$(RaftDir)\Raft_Data\Managed\UnityEngine.TerrainModule.dll')" Text="UnityEngine.TerrainModule.dll не найден: $(RaftDir)\Raft_Data\Managed" />
+
+		<Error Condition="!Exists('$(RaftDir)\Raft_Data\Managed\UnityEngine.TerrainPhysicsModule.dll')" Text="UnityEngine.TerrainPhysicsModule.dll не найден: $(RaftDir)\Raft_Data\Managed" />
+
+		<Error Condition="!Exists('$(RaftDir)\Raft_Data\Managed\UnityEngine.AssetBundleModule.dll')" Text="UnityEngine.AssetBundleModule.dll не найден: $(RaftDir)\Raft_Data\Managed\UnityEngine.AssetBundleModule.dll" />
+
+		<Error Condition="!Exists('$(RaftDir)\Raft_Data\Managed\UnityEngine.IMGUIModule.dll')" Text="UnityEngine.IMGUIModule.dll не найден: $(RaftDir)\Raft_Data\Managed" />
+
+		<Error Condition="!Exists('$(RaftDir)\Raft_Data\Managed\UnityEngine.UIModule.dll')" Text="UnityEngine.UIModule.dll не найден: $(RaftDir)\Raft_Data\Managed\UnityEngine.UIModule.dll" />
+
+		<Error Condition="!Exists('$(RaftDir)\Raft_Data\Managed\UnityEngine.UI.dll')" Text="UnityEngine.UI.dll не найден: $(RaftDir)\Raft_Data\Managed\UnityEngine.UI.dll" />
+
+		<Error Condition="!Exists('$(RaftDir)\Raft_Data\Managed\Unity.TextMeshPro.dll')" Text="Unity.TextMeshPro.dll не найден: $(RaftDir)\Raft_Data\Managed\Unity.TextMeshPro.dll" />
+	</Target>
+
+	<Target Name="SetReleaseRmodMode">
+		<PropertyGroup>
+			<RmodMode>Release</RmodMode>
+		</PropertyGroup>
+	</Target>
+
+	<Target Name="BuildDevRmod" AfterTargets="Build" Condition="'$(RmodMode)' != 'Release'">
+		<PropertyGroup>
+			<ModName>$([System.Text.RegularExpressions.Regex]::Match('$([System.IO.File]::ReadAllText("$(ProjectDir)modinfo.json"))', '&quot;name&quot;\s*:\s*&quot;([^&quot;]+)&quot;').Groups[1].Value)</ModName>
+			<ModVersion>$([System.Text.RegularExpressions.Regex]::Match('$([System.IO.File]::ReadAllText("$(ProjectDir)modinfo.json"))', '&quot;version&quot;\s*:\s*&quot;([^&quot;]+)&quot;').Groups[1].Value)</ModVersion>
+
+			<DevRmodTempDir>$(BaseIntermediateOutputPath)rmod-dev\</DevRmodTempDir>
+			<DevRmodFile>$(RaftModsDir)\$(ModName) v$(ModVersion) DEV.rmod</DevRmodFile>
+			<LegacyDevRmodFile>$(RaftModsDir)\$(AssemblyName).dev.rmod</LegacyDevRmodFile>
+			<LegacyUnversionedRmodFile>$(RaftModsDir)\$(ModName).rmod</LegacyUnversionedRmodFile>
+		</PropertyGroup>
+
+		<Error Condition="!Exists('$(ProjectDir)modinfo.json')" Text="modinfo.json не найден в корне проекта" />
+
+		<RemoveDir Directories="$(DevRmodTempDir)" Condition="Exists('$(DevRmodTempDir)')" />
+		<MakeDir Directories="$(DevRmodTempDir)" />
+		<MakeDir Directories="$(RaftModsDir)" Condition="!Exists('$(RaftModsDir)')" />
+
+		<ItemGroup>
+			<DevRmodFiles Include="$(ProjectDir)**\*" Exclude="$(ProjectDir)bin\**;$(ProjectDir)obj\**;$(ProjectDir)**\DevAutoLoad.Inject.ps1" />
+			<OldInstalledRmods Include="$(RaftModsDir)\$(ModName) v*.rmod" />
+		</ItemGroup>
+
+		<Copy SourceFiles="@(DevRmodFiles)"
+			  DestinationFiles="@(DevRmodFiles->'$(DevRmodTempDir)%(RecursiveDir)%(Filename)%(Extension)')"
+			  SkipUnchangedFiles="false" />
+
+		<Error Condition="!Exists('$(ProjectDir)DevAutoLoad.cs')" Text="DevAutoLoad.cs не найден" />
+		<Error Condition="!Exists('$(ProjectDir)DevAutoLoad.Inject.ps1')" Text="DevAutoLoad.Inject.ps1 не найден" />
+		<Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(ProjectDir)DevAutoLoad.Inject.ps1&quot; -StagingDir &quot;$(DevRmodTempDir).&quot; -ModId &quot;$(AssemblyName)&quot;" />
+
+		<Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -Command &quot;$p = '$(DevRmodTempDir)modinfo.json'; if (!(Test-Path -LiteralPath $p)) { throw 'DEV modinfo.json не найден' }; $c = [IO.File]::ReadAllText($p); if ($c -notmatch 'isModPermanent\x22\s*:') { throw 'Поле isModPermanent не найдено в modinfo.json' }; $c = [regex]::Replace($c, '(isModPermanent\x22\s*:\s*)(true|false)', '${1}true', [Text.RegularExpressions.RegexOptions]::IgnoreCase); [IO.File]::WriteAllText($p, $c, [Text.UTF8Encoding]::new($false))&quot;" />
+
+		<Delete Files="@(OldInstalledRmods)" />
+		<Delete Files="$(LegacyDevRmodFile)" Condition="Exists('$(LegacyDevRmodFile)')" />
+		<Delete Files="$(LegacyUnversionedRmodFile)" Condition="Exists('$(LegacyUnversionedRmodFile)')" />
+
+		<ZipDirectory SourceDirectory="$(DevRmodTempDir)"
+					  DestinationFile="$(DevRmodFile)"
+					  Overwrite="true" />
+
+		<RemoveDir Directories="$(DevRmodTempDir)" />
+
+		<Message Importance="high" Text="DEV RMod установлен: $(DevRmodFile)" />
+
+        <Delete Files="$(RaftModsDir)\$(AssemblyName) DEV AutoLoad.rmod"
+                Condition="Exists('$(RaftModsDir)\$(AssemblyName) DEV AutoLoad.rmod')" />
+        <Message Importance="high" Text="Отдельный DEV AutoLoad.rmod удалён - автозагрузка встроена в основной DEV-архив" />
+
+	</Target>
+
+	<Target Name="BuildReleaseRmod" AfterTargets="Pack">
+		<PropertyGroup>
+			<ModName>$([System.Text.RegularExpressions.Regex]::Match('$([System.IO.File]::ReadAllText("$(ProjectDir)modinfo.json"))', '&quot;name&quot;\s*:\s*&quot;([^&quot;]+)&quot;').Groups[1].Value)</ModName>
+			<ModVersion>$([System.Text.RegularExpressions.Regex]::Match('$([System.IO.File]::ReadAllText("$(ProjectDir)modinfo.json"))', '&quot;version&quot;\s*:\s*&quot;([^&quot;]+)&quot;').Groups[1].Value)</ModVersion>
+
+			<ReleaseRmodTempDir>$(BaseIntermediateOutputPath)rmod-release\</ReleaseRmodTempDir>
+			<ReleaseDir>$(ProjectDir)..\releases\</ReleaseDir>
+			<ReleaseRmodFile>$(ReleaseDir)$(ModName) v$(ModVersion).rmod</ReleaseRmodFile>
+		</PropertyGroup>
+
+		<Error Condition="!Exists('$(ProjectDir)modinfo.json')" Text="modinfo.json не найден в корне проекта" />
+
+		<RemoveDir Directories="$(ReleaseRmodTempDir)" Condition="Exists('$(ReleaseRmodTempDir)')" />
+		<MakeDir Directories="$(ReleaseRmodTempDir)" />
+		<MakeDir Directories="$(ReleaseDir)" />
+
+		<ItemGroup>
+			<ReleaseRmodFiles Include="$(ProjectDir)**\*"
+							  Exclude="$(ProjectDir)bin\**;$(ProjectDir)obj\**;$(ProjectDir)**\DevAutoLoad.cs;$(ProjectDir)**\DevAutoLoad.Inject.ps1" />
+		</ItemGroup>
+
+		<Copy SourceFiles="@(ReleaseRmodFiles)"
+			  DestinationFiles="@(ReleaseRmodFiles->'$(ReleaseRmodTempDir)%(RecursiveDir)%(Filename)%(Extension)')"
+			  SkipUnchangedFiles="false" />
+
+		<Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -Command &quot;$p = '$(ReleaseRmodTempDir)modinfo.json'; if (!(Test-Path -LiteralPath $p)) { throw 'Release modinfo.json не найден' }; $c = [IO.File]::ReadAllText($p); if ($c -notmatch 'isModPermanent\x22\s*:') { throw 'Поле isModPermanent не найдено в modinfo.json' }; $c = [regex]::Replace($c, '(isModPermanent\x22\s*:\s*)(true|false)', '${1}false', [Text.RegularExpressions.RegexOptions]::IgnoreCase); [IO.File]::WriteAllText($p, $c, [Text.UTF8Encoding]::new($false))&quot;" />
+
+		<Delete Files="$(ReleaseRmodFile)" Condition="Exists('$(ReleaseRmodFile)')" />
+
+		<ZipDirectory SourceDirectory="$(ReleaseRmodTempDir)"
+					  DestinationFile="$(ReleaseRmodFile)"
+					  Overwrite="true" />
+
+		<RemoveDir Directories="$(ReleaseRmodTempDir)" />
+
+		<Message Importance="high" Text="Release RMod создан: $(ReleaseRmodFile)" />
+	</Target>
+
+
+	<Target Name="LaunchRaftDev" AfterTargets="Rebuild">
+		<Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -Command &quot;$p = Get-Process -Name Raft -ErrorAction SilentlyContinue; if ($null -ne $p) { Write-Warning 'Raft уже запущен - закрой игру и запусти пересборку ещё раз'; exit 0 }; $steam = (Get-ItemProperty -Path 'HKCU:\Software\Valve\Steam' -ErrorAction SilentlyContinue).SteamExe; if ([string]::IsNullOrWhiteSpace($steam)) { $steam = Join-Path ${env:ProgramFiles(x86)} 'Steam\steam.exe' }; if (!(Test-Path $steam)) { throw 'Steam.exe не найден' }; $marker = '$(RaftModsDir)\$(AssemblyName).autoload.flag'; [IO.Directory]::CreateDirectory([IO.Path]::GetDirectoryName($marker)) | Out-Null; [IO.File]::WriteAllText($marker, '1'); try { Start-Process -FilePath $steam -ArgumentList '-applaunch 648800 -rml' -ErrorAction Stop; Write-Host 'Raft запущен через Steam с RML, маркер автозагрузки создан' } catch { Remove-Item -LiteralPath $marker -ErrorAction SilentlyContinue; throw }&quot;" />
+	</Target>
+
+</Project>
